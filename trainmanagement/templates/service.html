@@ -1,0 +1,596 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Services - Logis Bootstrap Template</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'img/favicon.png' %}" rel="icon">
+  <link href="{% static 'img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'css/main.css' %}" rel="stylesheet">
+
+  <!-- =======================================================
+  * Template Name: Logis
+  * Template URL: https://bootstrapmade.com/logis-bootstrap-logistics-website-template/
+  * Updated: Jun 27 2024 with Bootstrap v5.3.3
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body class="services-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+      <a href="{% url 'home' %}" class="logo d-flex align-items-center me-auto">
+        <h1 class="sitename">Train Comfort Manager</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="{% url 'home' %}">Home<br></a></li>
+          {% if user.is_authenticated %}          
+          <li><a href="{% url 'profile' request.user.id  %}" class="nav-item nav-link">Profile</a></li>
+          <li><a href="{% url 'book_ticket' %}" class="nav-item nav-link">Book Ticket</a></li>
+          {% endif %}
+
+          <li><a href="{% url 'passenger_register' %}">Register<br></a></li>
+
+          {% if user.is_authenticated %}
+                          {% if user.is_superuser %}
+                          <a href="{% url 'staff_register' %}" class="nav-item nav-link">Add Staff</a></li>
+                          <a href="{% url 'home' %}" class="nav-item nav-link">Staff List</a></li>
+                          {% else %}  
+                          {% if user.is_staff %}
+                          <a href="{% url 'doctor_registration' %}" class="nav-item nav-link">Registration Form</a></li>
+                          <!-- <a href="{% url 'appointment_list' %}" class="nav-item nav-link">View Appointment</a></li> -->
+                          <a href="{% url 'doctor_appointment_list' %}"class="nav-item nav-link" >View My Appointments</a>
+                          {% else %}
+                          
+                          <a href="{% url 'home' %}" class="nav-item nav-link">
+                              <i class="fas fa-bell"></i>
+                              {% if unread_notifications_count > 0 %}
+                                  <span class="badge badge-danger">{{ unread_notifications_count }}</span>
+                              {% endif %}
+                          </a>
+                          <li class="dropdown"><a href="#"><span>More</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                            <ul>
+                              <li><a href="{% url 'about' %}" class="active">About</a></li>
+                              <li><a href="{% url 'price' %}">Pricing</a></li>
+                              <li><a href="{% url 'service' %}">Services</a></li>
+                              <li><a href="{% url 'contact' %}">Contact</a></li>
+                            </ul>
+                          </li>
+                          {% endif %}
+                          {% endif %}
+                          <a href="{% url 'logout' %}" class="nav-item nav-link">Logout</a></li>
+                          {% else %}
+                          <li class="dropdown"><a href="#"><span>More</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                            <ul>
+                              <li><a href="{% url 'about' %}" class="active">About</a></li>
+                           
+                              <li><a href="{% url 'service' %}">Services</a></li>
+                              <li><a href="{% url 'contact' %}">Contact</a></li>
+                            </ul>
+                          </li>
+                          <a href="{% url 'loginform' %}" class="active nav-item nav-link">Login</a></li>
+                          {% endif %}
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+      <!-- <a class="btn-getstarted" href="{% url 'loginform' %}">Login</a> -->
+      
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title dark-background" data-aos="fade" style="background-image: url(assets/img/page-title-bg.jpg);">
+      <div class="container position-relative">
+        <h1>Services</h1>
+        <p>Explore our comprehensive range of services tailored to meet your needs.</p>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li class="current">Services</li>
+          </ol>
+        </nav>
+      </div>
+    </div><!-- End Page Title -->
+  
+    <!-- Featured Services Section -->
+    <section id="featured-services" class="featured-services section">
+  
+      <div class="container">
+  
+        <div class="row gy-4">
+  
+          <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="100">
+            <div class="icon flex-shrink-0"><i class="fa-solid fa-cart-flatbed"></i></div>
+            <div>
+              <h4 class="title">Freight Services</h4>
+              <p class="description">Efficient and reliable freight transportation solutions for businesses.</p>
+              <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+          <!-- End Service Item -->
+  
+          <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="200">
+            <div class="icon flex-shrink-0"><i class="fa-solid fa-truck"></i></div>
+            <div>
+              <h4 class="title">Logistics Management</h4>
+              <p class="description">Comprehensive logistics management services for streamlined operations.</p>
+              <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div><!-- End Service Item -->
+  
+          <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="300">
+            <div class="icon flex-shrink-0"><i class="fa-solid fa-truck-ramp-box"></i></div>
+            <div>
+              <h4 class="title">Cargo Handling</h4>
+              <p class="description">Efficient cargo handling services to ensure safe and timely delivery.</p>
+              <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div><!-- End Service Item -->
+  
+        </div>
+  
+      </div>
+  
+    </section><!-- /Featured Services Section -->
+  
+    <!-- Services Section -->
+    <section id="services" class="services section">
+  
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <span>Our Services</span>
+        <h2>Explore Our Services</h2>
+        <p>Discover a wide range of services designed to meet your transportation and logistics needs.</p>
+      </div><!-- End Section Title -->
+  
+      <div class="container">
+  
+        <div class="row gy-4">
+  
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="card">
+              <div class="card-img">
+                <img src="{% static 'img/service-1.jpg' %}" alt="" class="img-fluid">
+              </div>
+              <h3>Storage Solutions</h3>
+              <p>Efficient storage solutions to meet your warehousing needs.</p>
+            </div>
+          </div><!-- End Card Item -->
+  
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="card">
+              <div class="card-img">
+                <img src="{% static 'img/service-2.jpg' %}" alt="" class="img-fluid">
+              </div>
+              <h3><a href="#" class="stretched-link">Logistics Support</a></h3>
+              <p>Comprehensive logistics support to optimize supply chain operations.</p>
+            </div>
+          </div><!-- End Card Item -->
+  
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="card">
+              <div class="card-img">
+                <img src="{% static 'img/service-3.jpg' %}" alt="" class="img-fluid">
+              </div>
+              <h3><a href="#" class="stretched-link">Cargo Transport</a></h3>
+              <p>Reliable cargo transport services for secure and efficient delivery.</p>
+            </div>
+          </div><!-- End Card Item -->
+  
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+            <div class="card">
+              <div class="card-img">
+                <img src="{% static 'img/service-4.avif' %}" alt="" class="img-fluid">
+              </div>
+              <h3><a href="#" class="stretched-link">Emergency Services</a></h3>
+              <p>Efficient and timely Emergency services for diverse transportation needs.</p>
+            </div>
+          </div><!-- End Card Item -->
+  
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+            <div class="card">
+              <div class="card-img">
+                <img src="{% static 'img/service-5.jpg' %}" alt="" class="img-fluid">
+              </div>
+              <h3>Packaging Solutions</h3>
+              <p>Customized packaging solutions to ensure product safety during transportation.</p>
+            </div>
+          </div><!-- End Card Item -->
+  
+          <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+            <div class="card">
+              <div class="card-img">
+                <img src="{% static 'img/service-6.jpg' %}" alt="" class="img-fluid">
+              </div>
+              <h3><a href="#" class="stretched-link">Warehousing</a></h3>
+              <p>Secure and efficient warehousing services for your inventory management needs.</p>
+            </div>
+          </div><!-- End Card Item -->
+  
+        </div>
+  
+      </div>
+  
+    </section><!-- /Services Section -->
+  
+   <!-- Features Section -->
+<section id="features" class="features section">
+
+  <!-- Section Title -->
+  <div class="container section-title" data-aos="fade-up">
+    <span>Key Features</span>
+    <h2>Key Features</h2>
+    <p>Discover the unique features that set us apart in delivering superior logistics and transportation services.</p>
+  </div><!-- End Section Title -->
+
+  <div class="container">
+
+    <div class="row gy-4 align-items-center features-item">
+      <div class="col-md-5 d-flex align-items-center" data-aos="zoom-out" data-aos-delay="100">
+        <img src="{% static 'img/features-1.jpg' %}" class="img-fluid" alt="">
+      </div>
+      <div class="col-md-7" data-aos="fade-up" data-aos-delay="100">
+        <h3>Advanced Logistics Solutions</h3>
+        <p class="fst-italic">
+          Streamline your supply chain with our advanced logistics solutions tailored to meet industry demands.
+        </p>
+        <ul>
+          <li><i class="bi bi-check"></i><span> Optimize operations with seamless integration.</span></li>
+          <li><i class="bi bi-check"></i> <span>Enhance efficiency and reduce operational costs.</span></li>
+          <li><i class="bi bi-check"></i> <span>Deliver superior customer satisfaction.</span></li>
+        </ul>
+      </div>
+    </div><!-- Features Item -->
+
+    <div class="row gy-4 align-items-center features-item">
+      <div class="col-md-5 order-1 order-md-2 d-flex align-items-center" data-aos="zoom-out" data-aos-delay="200">
+        <img src="{% static 'img/features-2.jpg' %}" class="img-fluid" alt="">
+      </div>
+      <div class="col-md-7 order-2 order-md-1" data-aos="fade-up" data-aos-delay="200">
+        <h3>Flexible Transport Solutions</h3>
+        <p class="fst-italic">
+          Tailored transport solutions designed to meet diverse business needs and geographical challenges.
+        </p>
+        <p>
+          Delivering comprehensive transport solutions that ensure timely delivery and maximize operational efficiency.
+        </p>
+      </div>
+    </div><!-- Features Item -->
+
+    <div class="row gy-4 align-items-center features-item">
+      <div class="col-md-5 d-flex align-items-center" data-aos="zoom-out">
+        <img src="{% static 'img/features-3.jpg' %}" class="img-fluid" alt="">
+      </div>
+      <div class="col-md-7" data-aos="fade-up">
+        <h3>Innovative Packaging Solutions</h3>
+        <p>Enhance product safety and brand integrity with our innovative packaging solutions designed to protect your products during transit.</p>
+        <ul>
+          <li><i class="bi bi-check"></i> <span>Customized packaging solutions for various product types.</span></li>
+          <li><i class="bi bi-check"></i><span> Durable and eco-friendly materials.</span></li>
+          <li><i class="bi bi-check"></i> <span>Ensure product integrity and customer satisfaction.</span></li>
+        </ul>
+      </div>
+    </div><!-- Features Item -->
+
+    <div class="row gy-4 align-items-center features-item">
+      <div class="col-md-5 order-1 order-md-2 d-flex align-items-center" data-aos="zoom-out">
+        <img src="{% static 'img/features-4.jpg' %}" class="img-fluid" alt="">
+      </div>
+      <div class="col-md-7 order-2 order-md-1" data-aos="fade-up">
+        <h3>Reliable Warehousing Solutions</h3>
+        <p class="fst-italic">
+          Secure and reliable warehousing solutions ensuring optimal storage management and inventory control.
+        </p>
+        <p>
+          Our warehousing services provide comprehensive storage solutions designed to meet your business needs.
+        </p>
+      </div>
+    </div><!-- Features Item -->
+
+  </div>
+
+</section><!-- /Features Section -->
+
+  </main>
+  
+
+  <!-- Testimonials Section -->
+<section id="testimonials" class="testimonials section dark-background">
+
+  <img src="{% static 'img/train-testimonials-bg.jpg' %}" class="testimonials-bg" alt="Train Testimonials Background">
+
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+    <div class="swiper init-swiper">
+      <script type="application/json" class="swiper-config">
+        {
+          "loop": true,
+          "speed": 600,
+          "autoplay": {
+            "delay": 5000
+          },
+          "slidesPerView": "auto",
+          "pagination": {
+            "el": ".swiper-pagination",
+            "type": "bullets",
+            "clickable": true
+          }
+        }
+      </script>
+      <div class="swiper-wrapper">
+
+        <div class="swiper-slide">
+          <div class="testimonial-item">
+            <img src="{% static 'img/testimonials/testimonials-1.jpg' %}" class="testimonial-img" alt="Testimonial Image 1">
+            <h3>Emily Davis</h3>
+            <h4>Passenger</h4>
+            <div class="stars">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+            <p>
+              <i class="bi bi-quote quote-icon-left"></i>
+              <span>"Traveling by train has always been my favorite. It's relaxing, scenic, and environmentally friendly. I love the experience!"</span>
+              <i class="bi bi-quote quote-icon-right"></i>
+            </p>
+          </div>
+        </div><!-- End testimonial item -->
+
+        <div class="swiper-slide">
+          <div class="testimonial-item">
+            <img src="{% static 'img/testimonials/testimonials-2.jpg' %}" class="testimonial-img" alt="Testimonial Image 2">
+            <h3>Michael Rogers</h3>
+            <h4>Commuter</h4>
+            <div class="stars">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+            <p>
+              <i class="bi bi-quote quote-icon-left"></i>
+              <span>"The convenience and punctuality of train services make my daily commute stress-free. It's efficient and cost-effective."</span>
+              <i class="bi bi-quote quote-icon-right"></i>
+            </p>
+          </div>
+        </div><!-- End testimonial item -->
+
+        <div class="swiper-slide">
+          <div class="testimonial-item">
+            <img src="{% static 'img/testimonials/testimonials-3.jpg' %}" class="testimonial-img" alt="Testimonial Image 3">
+            <h3>Lisa Johnson</h3>
+            <h4>Frequent Traveler</h4>
+            <div class="stars">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+            <p>
+              <i class="bi bi-quote quote-icon-left"></i>
+              <span>"I enjoy exploring new destinations by train. It offers a unique way to see the country and meet interesting people along the journey."</span>
+              <i class="bi bi-quote quote-icon-right"></i>
+            </p>
+          </div>
+        </div><!-- End testimonial item -->
+
+        <div class="swiper-slide">
+          <div class="testimonial-item">
+            <img src="{% static 'img/testimonials/testimonials-4.jpg' %}" class="testimonial-img" alt="Testimonial Image 4">
+            <h3>David Thompson</h3>
+            <h4>Rail Enthusiast</h4>
+            <div class="stars">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+            <p>
+              <i class="bi bi-quote quote-icon-left"></i>
+              <span>"Trains embody a sense of nostalgia and adventure for me. Each journey brings a new story and a memorable experience."</span>
+              <i class="bi bi-quote quote-icon-right"></i>
+            </p>
+          </div>
+        </div><!-- End testimonial item -->
+
+        <div class="swiper-slide">
+          <div class="testimonial-item">
+            <img src="{% static 'img/testimonials/testimonials-5.jpg' %}" class="testimonial-img" alt="Testimonial Image 5">
+            <h3>Sophia Carter</h3>
+            <h4>Travel Blogger</h4>
+            <div class="stars">
+              <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+            </div>
+            <p>
+              <i class="bi bi-quote quote-icon-left"></i>
+              <span>"Train travel inspires my wanderlust. It's a sustainable way to explore the world while connecting with diverse cultures."</span>
+              <i class="bi bi-quote quote-icon-right"></i>
+            </p>
+          </div>
+        </div><!-- End testimonial item -->
+
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+
+  </div>
+
+</section><!-- /Testimonials Section -->
+
+    <!-- Faq Section -->
+    <section id="faq" class="faq section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <span>Frequently Asked Questions</span>
+        <h2>Frequently Asked Questions</h2>
+        <p>Find answers to common questions about our railway services.</p>
+      </div><!-- End Section Title -->
+    
+      <div class="container">
+    
+        <div class="row justify-content-center">
+    
+          <div class="col-lg-10">
+    
+            <div class="faq-container">
+    
+              <div class="faq-item faq-active" data-aos="fade-up" data-aos-delay="200">
+                <i class="faq-icon bi bi-question-circle"></i>
+                <h3>How do I book a train ticket?</h3>
+                <div class="faq-content">
+                  <p>Booking a train ticket with us is easy! You can book online through our website or mobile app, or visit any of our ticket counters at the station.</p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div><!-- End Faq item-->
+    
+              <div class="faq-item" data-aos="fade-up" data-aos-delay="300">
+                <i class="faq-icon bi bi-question-circle"></i>
+                <h3>What amenities are available onboard?</h3>
+                <div class="faq-content">
+                  <p>We provide various amenities onboard, including comfortable seating, dining options, Wi-Fi, and entertainment. Specific amenities may vary by train type and route.</p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div><!-- End Faq item-->
+    
+              <div class="faq-item" data-aos="fade-up" data-aos-delay="400">
+                <i class="faq-icon bi bi-question-circle"></i>
+                <h3>Can I bring pets on the train?</h3>
+                <div class="faq-content">
+                  <p>Small pets are generally allowed onboard, subject to specific guidelines and conditions. Please check our pet policy or contact us for more details.</p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div><!-- End Faq item-->
+    
+              <div class="faq-item" data-aos="fade-up" data-aos-delay="500">
+                <i class="faq-icon bi bi-question-circle"></i>
+                <h3>How can I track the status of my train?</h3>
+                <div class="faq-content">
+                  <p>You can track your train's status in real-time through our website, mobile app, or by calling our customer service. We provide live updates on departure, arrival times, and delays.</p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div><!-- End Faq item-->
+    
+              <div class="faq-item" data-aos="fade-up" data-aos-delay="600">
+                <i class="faq-icon bi bi-question-circle"></i>
+                <h3>What should I do if I miss my train?</h3>
+                <div class="faq-content">
+                  <p>If you miss your train, you may be able to reschedule your ticket depending on availability and our rescheduling policy. Contact us or visit a station for assistance.</p>
+                </div>
+                <i class="faq-toggle bi bi-chevron-right"></i>
+              </div><!-- End Faq item-->
+    
+            </div>
+    
+          </div>
+    
+        </div>
+    
+      </div>
+    
+    </section><!-- /Faq Section -->
+
+  </main>
+
+  <footer id="footer" class="footer dark-background">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="col-lg-5 col-md-12 footer-about">
+          <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+            <span class="sitename">Logis</span>
+          </a>
+          <p>Cras fermentum odio eu feugiat lide par naso tierra. Justo eget nada terra videa magna derita valies darta donna mare fermentum iaculis eu non diam phasellus.</p>
+          <div class="social-links d-flex mt-4">
+            <a href=""><i class="bi bi-twitter-x"></i></a>
+            <a href=""><i class="bi bi-facebook"></i></a>
+            <a href=""><i class="bi bi-instagram"></i></a>
+            <a href=""><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+
+        <div class="col-lg-2 col-6 footer-links">
+          <h4>Useful Links</h4>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About us</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Terms of service</a></li>
+            <li><a href="#">Privacy policy</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-2 col-6 footer-links">
+          <h4>Our Services</h4>
+          <ul>
+            <li><a href="#">Web Design</a></li>
+            <li><a href="#">Web Development</a></li>
+            <li><a href="#">Product Management</a></li>
+            <li><a href="#">Marketing</a></li>
+            <li><a href="#">Graphic Design</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+          <h4>Contact Us</h4>
+          <p>A108 Adam Street</p>
+          <p>New York, NY 535022</p>
+          <p>United States</p>
+          <p class="mt-4"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
+          <p><strong>Email:</strong> <span>info@example.com</span></p>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright</span> <strong class="px-1 sitename">Logis</strong> <span>All Rights Reserved</span></p>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you've purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <!-- <div id="preloader"></div> -->
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
+  <script src="{% static 'vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+
+</html>

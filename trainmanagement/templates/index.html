@@ -1,0 +1,486 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Indian Rail</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'img/favicon.png' %}" rel="icon">
+  <link href="{% static 'img/apple-touch-icon.png' % }" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'css/main.css' %}" rel="stylesheet">
+</head>
+
+<body class="index-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center">
+      <a href="{% url 'home' %}" class="logo d-flex align-items-center me-auto">
+        <h1 class="sitename">Train Comfort Manager</h1>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="{% url 'home' %}">Home<br></a></li>
+          {% if user.is_authenticated %}          
+          <li><a href="{% url 'profile' request.user.id  %}" class="nav-item nav-link">Profile</a></li>
+          <li><a href="{% url 'book_ticket' %}" class="nav-item nav-link">Book Ticket</a></li>
+          {% endif %}
+
+          <li><a href="{% url 'passenger_register' %}">Register<br></a></li>
+
+          {% if user.is_authenticated %}
+                          {% if user.is_superuser %}
+                          <a href="{% url 'staff_register' %}" class="nav-item nav-link">Add Staff</a></li>
+                          <a href="{% url 'add_bed' %}" class="nav-item nav-link">Add Bed</a></li>
+                          {% else %}  
+                          {% if user.is_staff %}
+                          <a href="{% url 'doctor_registration' %}" class="nav-item nav-link">Registration Form</a></li>
+                          <!-- <a href="{% url 'appointment_list' %}" class="nav-item nav-link">View Appointment</a></li> -->
+                          <a href="{% url 'doctor_appointment_list' %}"class="nav-item nav-link" >View My Appointments</a>
+                          {% else %}
+                          
+                          <a href="{% url 'home' %}" class="nav-item nav-link">
+                              <i class="fas fa-bell"></i>
+                              {% if unread_notifications_count > 0 %}
+                                  <span class="badge badge-danger">{{ unread_notifications_count }}</span>
+                              {% endif %}
+                          </a>
+                          <li class="dropdown"><a href="#"><span>More</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                            <ul>
+                              <li><a href="{% url 'about' %}" class="active">About</a></li>
+                              <li><a href="{% url 'service' %}">Services</a></li>
+                              <li><a href="{% url 'contact' %}">Contact</a></li>
+                            </ul>
+                          </li>
+                          {% endif %}
+                          {% endif %}
+                          <a href="{% url 'logout' %}" class="nav-item nav-link">Logout</a></li>
+                          {% else %}
+                          <li class="dropdown"><a href="#"><span>More</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                            <ul>
+                              <li><a href="{% url 'about' %}" class="active">About</a></li>
+                              <li><a href="{% url 'service' %}">Services</a></li>
+                              <li><a href="{% url 'contact' %}">Contact</a></li>
+                            </ul>
+                          </li>
+                          <a href="{% url 'loginform' %}" class="active nav-item nav-link">Login</a></li>
+                          {% endif %}
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+      <!-- <a class="btn-getstarted" href="{% url 'loginform' %}">Login</a> -->
+      
+
+    </div>
+  </header>
+
+  <main class="main">
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero section dark-background">
+
+      <div class="container">
+        <div class="row gy-4 d-flex justify-content-between">
+          <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center">
+            <h2 data-aos="fade-up">Streamline Your Train Travel Comfort</h2>
+            <p data-aos="fade-up" data-aos-delay="100">Experience enhanced comfort with our bed roll distribution system, ensuring a cozy and relaxing journey for every passenger.</p>
+
+            <!-- <form action="#" class="form-search d-flex align-items-stretch mb-3" data-aos="fade-up" data-aos-delay="200"> -->
+              <!-- <input type="text" class="form-control" placeholder="Search services or info"> -->
+            <!-- </form> -->
+             <div>
+              {% if user.is_authenticated %}
+               <button class="btn btn-primary"  onclick="location.href='{% url 'book_ticket' %}'">Book Ticket</button>
+               {% else%}
+               <button class="btn btn-primary"  onclick="location.href='{% url 'loginform' %}'">Login</button>
+               {% endif %}
+            </div>
+              
+
+            <div class="row gy-4" data-aos="fade-up" data-aos-delay="300">
+
+              <div class="col-lg-3 col-6">
+                <div class="stats-item text-center w-100 h-100">
+                  <span data-purecounter-start="0" data-purecounter-end="500" data-purecounter-duration="0" class="purecounter">500</span>
+                  <p>Passengers Served</p>
+                </div>
+              </div><!-- End Stats Item -->
+
+              <div class="col-lg-3 col-6">
+                <div class="stats-item text-center w-100 h-100">
+                  <span data-purecounter-start="0" data-purecounter-end="1500" data-purecounter-duration="0" class="purecounter">1500</span>
+                  <p>Bed Rolls Distributed</p>
+                </div>
+              </div><!-- End Stats Item -->
+
+              <div class="col-lg-3 col-6">
+                <div class="stats-item text-center w-100 h-100">
+                  <span data-purecounter-start="0" data-purecounter-end="200" data-purecounter-duration="0" class="purecounter">200</span>
+                  <p>Stations Covered</p>
+                </div>
+              </div><!-- End Stats Item -->
+
+              <div class="col-lg-3 col-6">
+                <div class="stats-item text-center w-100 h-100">
+                  <span data-purecounter-start="0" data-purecounter-end="100" data-purecounter-duration="0" class="purecounter">100</span>
+                  <p>Train Staff</p>
+                </div>
+              </div><!-- End Stats Item -->
+
+            </div>
+
+          </div>
+
+          <div class="col-lg-5 order-1 order-lg-2 hero-img" data-aos="zoom-out">
+            <!-- <img src="{% static 'img/hero-img.svg' %}" class="img-fluid mb-3 mb-lg-0" alt=""> -->
+            <img src="https://s3.rdbuz.com/web/images/homeV2/AboutUs/railPop.png" class="img-fluid mb-3 mb-lg-0" alt="">
+          </div>
+
+        </div>
+      </div>
+
+    </section><!-- /Hero Section -->
+
+    <!-- Featured Services Section -->
+    <section id="featured-services" class="featured-services section">
+
+      <div class="container">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="100">
+            <div class="icon flex-shrink-0"><i class="fa-solid fa-user-shield"></i></div>
+            <div>
+              <h4 class="title">User Authentication</h4>
+              <p class="description">Secure login system for different user roles: passengers, train staff, and administrators.</p>
+              <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div>
+          <!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="200">
+            <div class="icon flex-shrink-0"><i class="fa-solid fa-address-card"></i></div>
+            <div>
+              <h4 class="title">Passenger Profiles</h4>
+              <p class="description">Detailed profiles including travel history, preferences, and special requests.</p>
+              <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="300">
+            <div class="icon flex-shrink-0"><i class="fa-solid fa-bed"></i></div>
+            <div>
+              <h4 class="title">Bed Roll Reservation</h4>
+              <p class="description">Passengers can reserve bed rolls during ticket booking or after, with real-time inventory updates.</p>
+              <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div><!-- End Service Item -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Featured Services Section -->
+
+    <!-- About Section -->
+    <section id="about" class="about section">
+
+      <div class="container">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-6 position-relative align-self-start order-lg-last order-first" data-aos="fade-up" data-aos-delay="200">
+            <img src="{% static 'img/train2.jpg' %}" class="img-fluid" alt="">
+            <a href="https://www.youtube.com/watch?v=LXb3EKWsInQ" class="glightbox pulsating-play-btn"></a>
+          </div>
+
+          <div class="col-lg-6 content order-last  order-lg-first" data-aos="fade-up" data-aos-delay="100">
+            <h3>About Us</h3>
+            <p>
+              Our system ensures a comfortable journey by streamlining bed roll distribution and maintaining a robust inventory system for passenger satisfaction.
+            </p>
+            <ul>
+              <li>
+                <i class="bi bi-diagram-3"></i>
+                <div>
+                  <h5>Optimized Inventory Management</h5>
+                  <p>Track the stock of bed rolls at different train stations and on trains, with automated alerts for low inventory levels.</p>
+                </div>
+              </li>
+              <li>
+                <i class="bi bi-fullscreen-exit"></i>
+                <div>
+                  <h5>Real-Time Updates</h5>
+                  <p>Ensure real-time updates and seamless communication between train staff and passengers.</p>
+                </div>
+              </li>
+              <li>
+                <i class="bi bi-broadcast"></i>
+                <div>
+                  <h5>Efficient Distribution</h5>
+                  <p>Facilitate efficient distribution of bed rolls to enhance passenger comfort.</p>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section><!-- /About Section -->
+
+    <!-- Services Section -->
+    <section id="services" class="services section">
+
+      <div class="container">
+
+        <div class="section-header">
+          <h2>Our Services</h2>
+          <p>Explore the range of services we offer to enhance your travel comfort.</p>
+        </div>
+
+        <div class="row gy-4">
+
+          <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="100">
+            <div class="icon flex-shrink-0"><i class="fa-solid fa-user-lock"></i></div>
+            <div>
+              <h4 class="title">Secure Authentication</h4>
+              <p class="description">Robust security measures for user authentication and authorization.</p>
+              <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="200">
+            <div class="icon flex-shrink-0"><i class="fa-solid fa-train"></i></div>
+            <div>
+              <h4 class="title">Train and Station Management</h4>
+              <p class="description">Seamless integration of bed roll inventory across trains and stations.</p>
+              <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="300">
+            <div class="icon flex-shrink-0"><i class="fa-solid fa-calendar-check"></i></div>
+            <div>
+              <h4 class="title">Reservation Management</h4>
+              <p class="description">Easy reservation system for bed rolls during and after ticket booking.</p>
+              <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="400">
+            <div class="icon flex-shrink-0"><i class="fa-solid fa-bell"></i></div>
+            <div>
+              <h4 class="title">Inventory Alerts</h4>
+              <p class="description">Automated alerts for low inventory levels to ensure availability.</p>
+              <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div><!-- End Service Item -->
+
+          <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="500">
+            <div class="icon flex-shrink-0"><i class="fa-solid fa-chart-line"></i></div>
+            <div>
+              <h4 class="title">Historical Data Analysis</h4>
+              <p class="description">Analyze historical data for inventory optimization and improved service delivery.</p>
+              <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div><!-- End Service Item -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Services Section -->
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact section">
+
+      <div class="container">
+
+        <div class="section-header">
+          <h2>Contact Us</h2>
+          <p>We would love to hear from you. Get in touch with us for any queries or feedback.</p>
+        </div>
+
+        <div class="row gy-4">
+
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="info-item  d-flex flex-column justify-content-center align-items-center">
+              <i class="fa-solid fa-location-dot"></i>
+              <h4>Our Address</h4>
+              <p>1234 Train Street, Comfort City, CT 56789</p>
+            </div>
+          </div><!-- End Info Item -->
+
+          <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="info-item  d-flex flex-column justify-content-center align-items-center">
+              <i class="fa-solid fa-envelope"></i>
+              <h4>Email Us</h4>
+              <p>info@traincomfort.com</p>
+            </div>
+          </div><!-- End Info Item -->
+
+          <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="300">
+            <div class="info-item  d-flex flex-column justify-content-center align-items-center">
+              <i class="fa-solid fa-phone"></i>
+              <h4>Call Us</h4>
+              <p>+1 234 567 890</p>
+            </div>
+          </div><!-- End Info Item -->
+
+        </div>
+
+        <div class="row gy-4 mt-1">
+
+          <div class="col-lg-12" data-aos="fade-up" data-aos-delay="400">
+            <form action="forms/contact.php" method="post" class="php-email-form">
+              <div class="row gy-4">
+
+                <div class="col-md-6">
+                  <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+                </div>
+
+                <div class="col-md-6">
+                  <input type="email" name="email" class="form-control" placeholder="Your Email" required>
+                </div>
+
+                <div class="col-md-12">
+                  <input type="text" name="subject" class="form-control" placeholder="Subject" required>
+                </div>
+
+                <div class="col-md-12">
+                  <textarea name="message" class="form-control" rows="6" placeholder="Message" required></textarea>
+                </div>
+
+                <div class="col-md-12 text-center">
+                  <button type="submit" class="btn btn-primary">Send Message</button>
+                </div>
+
+              </div>
+            </form>
+          </div><!-- End Contact Form -->
+
+        </div>
+
+      </div>
+
+    </section><!-- /Contact Section -->
+
+  </main><!-- End #main -->
+
+  <!-- Footer -->
+  <footer id="footer" class="footer">
+
+    <div class="footer-content">
+      <div class="container">
+
+        <div class="row gy-4">
+          <div class="col-lg-5 col-md-12 footer-info">
+            <h4>Train Comfort Manager</h4>
+            <p>Ensuring a comfortable journey for every passenger with streamlined bed roll distribution and efficient inventory management.</p>
+            <div class="social-links d-flex mt-3">
+              <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
+              <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
+              <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
+              <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-2 col-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><a href="#">Home</a></li>
+              <li><a href="#">About us</a></li>
+              <li><a href="#">Services</a></li>
+              <li><a href="#">Contact</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-2 col-6 footer-links">
+            <h4>Our Services</h4>
+            <ul>
+              <li><a href="#">Secure Authentication</a></li>
+              <li><a href="#">Reservation Management</a></li>
+              <li><a href="#">Inventory Management</a></li>
+              <li><a href="#">Data Analysis</a></li>
+            </ul>
+          </div>
+
+          <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+            <h4>Contact Us</h4>
+            <p>
+              1234 Train Street<br>
+              Comfort City, CT 56789<br>
+              United States<br><br>
+              <strong>Phone:</strong> +1 234 567 890<br>
+              <strong>Email:</strong> info@traincomfort.com<br>
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <div class="footer-legal text-center">
+      <div class="container d-flex flex-column flex-lg-row justify-content-center justify-content-lg-between align-items-center">
+
+        <div class="d-flex flex-column align-items-center align-items-lg-start">
+          <div class="copyright">
+            &copy; Copyright <strong><span>Train Comfort Manager</span></strong>. All Rights Reserved
+          </div>
+          <div class="credits">
+            <!-- All the links in the footer should remain intact. -->
+            <!-- You can delete the links only if you purchased the pro version. -->
+            <!-- Licensing information: https://bootstrapmade.com/license/ -->
+            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/ninestars-free-bootstrap-3-theme-for-creative/ -->
+            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+          </div>
+        </div>
+
+         
+
+      </div>
+    </div>
+
+  </footer><!-- /Footer -->
+
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/aos/aos.js' %}"></script>
+  <script src="{% static 'vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'vendor/purecounter/purecounter_vanilla.js' %}"></script>
+  <script src="{% static 'vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'vendor/php-email-form/validate.js' %}"></script>
+
+  <!-- Main JS File -->
+  <script src="{% static 'js/main.js' %}"></script>
+  
+</body>
+</html>

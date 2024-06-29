@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .header {
+            background-color: #343a40;
+            color: #ffffff;
+            padding: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .profile-title {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #343a40;
+        }
+        .profile-section {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 20px;
+        }
+        .title {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: #343a40;
+        }
+        .profile-fields {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .profile-field {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 10px;
+        }
+        .profile-field label {
+            font-weight: bold;
+            color: #6c757d;
+        }
+        .profile-field p {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            color: #495057;
+            margin: 5px 0;
+            font-size: 1em;
+        }
+        .profile-field input {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+        .edit-button, .submit-button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 1em;
+        }
+        .edit-button:hover, .submit-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>User Profile</h1>
+    </header>
+
+    <div class="container">
+        <h2 class="profile-title">Profile Details</h2>
+
+        <div class="profile-section">
+            <span class="title"><strong>Personal Details</strong></span>
+            <br><br>
+            <div class="profile-fields">
+                <div class="profile-field">
+                    <label>Full Name</label>
+                    <p>{{ passenger.fullname }}</p>
+                </div>
+                <div class="profile-field">
+                    <label>Date of Birth</label>
+                    <p>{{ passenger.birth_date }}</p>
+                </div>
+                <div class="profile-field">
+                    <label>Email</label>
+                    <p>{{ passenger.email }}</p>
+                </div>
+                <div class="profile-field">
+                    <label>Mobile Number</label>
+                    <p>{{ passenger.phone_number }}</p>
+                </div>
+                <div class="profile-field">
+                    <label>Gender</label>
+                    <p>{{ passenger.gender }}</p>
+                </div>
+                <div class="profile-field">
+                    <label>Occupation</label>
+                    <p>{{ passenger.occupation }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-section">
+            <span class="title"><strong>Additional Details</strong></span> <br> <br>
+            <div class="profile-fields">
+                <div class="profile-field">
+                    <label>Nationality</label>
+                    <p>{{ passenger.nationality }}</p>
+                </div>
+                <div class="profile-field">
+                    <label>City</label>
+                    <p>{{ passenger.city }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ticket Booking History -->
+        <div class="profile-section">
+          <span class="title"><strong>Ticket Booking History</strong></span><br><br>
+          {% if tickets %}
+          <div class="profile-fields">
+              {% for ticket in tickets %}
+              <div class="profile-field">
+                  <label>Journey Type</label>
+                  <p>{{ ticket.journey_type }}</p>
+              </div>
+              <div class="profile-field">
+                  <label>To</label>
+                  <p>{{ ticket.arrival_station }}</p>
+              </div>
+              <div class="profile-field">
+                  <label>From</label>
+                  <p>{{ ticket.departure_station }}</p>
+              </div>
+              <div class="profile-field">
+                  <label>Type of Bedroll</label>
+                  <p>{{ ticket.bedroll }}</p>
+              </div>
+              <div class="profile-field">
+                <label>No. of Bedroll</label>
+                <p id="bedroll-count-{{ ticket.id }}">{{ ticket.number_of_bedrolls }}</p>
+
+                <!-- New Section for Available Beds -->
+<div class="profile-section">
+  <span class="title"><strong>Available Beds</strong></span><br><br>
+  {% if available_beds %}
+  <div class="profile-fields">
+      {% for bed in available_beds %}
+      <div class="profile-field">
+          <label>Bed Type</label>
+          <p>{{ bed.bed_type }}</p>
+      </div>
+      <div class="profile-field">
+          <label>Price</label>
+          <p>{{ bed.price }}</p>
+      </div>
+      <div class="profile-field">
+          <label>Quantity</label>
+          <p>{{ bed.quantity }}</p>
+      </div>
+      <!-- Add more fields as needed -->
+      {% endfor %}
+  </div>
+  {% else %}
+  <p>No available beds found.</p>
+  {% endif %}
+                <input type="number" id="bedroll-input-{{ ticket.id }}" value="{{ ticket.number_of_bedrolls }}" style="display:none;">
+              </div>
+              <div class="profile-field">
+                  <button class="edit-button" id="edit-button-{{ ticket.id }}" onclick="editBedroll({{ ticket.id }})">Edit Bedrolls</button>
+                  <button class="submit-button" id="submit-button-{{ ticket.id }}" onclick="submitBedroll({{ ticket.id }})" style="display:none;">Submit</button>
+              </div>
+              <!-- Add more fields as needed -->
+              {% endfor %}
+          </div>
+          {% else %}
+          <p>No ticket booking history found.</p>
+          {% endif %}
+        </div>
+    </div>
+
+    <script>
+        function editBedroll(ticketId) {
+            document.getElementById('bedroll-count-' + ticketId).style.display = 'none';
+            document.getElementById('bedroll-input-' + ticketId).style.display = 'block';
+            document.getElementById('edit-button-' + ticketId).style.display = 'none';
+            document.getElementById('submit-button-' + ticketId).style.display = 'inline-block';
+        }
+
+        function submitBedroll(ticketId) {
+            const bedrollCount = document.getElementById('bedroll-input-' + ticketId).value;
+
+            fetch(`/update_bedroll/${ticketId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    number_of_bedrolls: bedrollCount
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('bedroll-count-' + ticketId).textContent = bedrollCount;
+                    document.getElementById('bedroll-count-' + ticketId).style.display = 'block';
+                    document.getElementById('bedroll-input-' + ticketId).style.display = 'none';
+                    document.getElementById('edit-button-' + ticketId).style.display = 'inline-block';
+                    document.getElementById('submit-button-' + ticketId).style.display = 'none';
+                } else {
+                    alert('Bed updated successfully ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Bed updated successfully');
+            });
+        }
+    </script>
+</body>
+</html>

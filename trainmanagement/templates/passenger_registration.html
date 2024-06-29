@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="{% static 'css/registerstyle.css' %}">
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+
+
+    <!-- added  -->
+     <!-- Favicons -->
+  <link href="{% static 'img/favicon.png' %}" rel="icon">
+  <link href="{% static 'img/apple-touch-icon.png' % }" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/aos/aos.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="{% static 'css/main.css' %}" rel="stylesheet">
+
+  <!-- /added  -->
+
+    <title>Registration Form</title>
+</head>
+<body>
+
+
+    <div class="container">
+            <header id="header" class="header d-flex align-items-center" style="background-color: rgb(20, 19, 79);">
+                <div class="container-fluid container-xl position-relative d-flex align-items-center">
+                  <a href="{% url 'home' %}" class="logo d-flex align-items-center me-auto">
+                    <img src="{% static 'img/logo.png'%}" alt="image">
+                    <h1 class="sitename">Train Comfort Manager</h1>
+                  </a>
+            
+                  <nav id="navmenu" class="navmenu">
+                    <ul>
+                      <li><a href="{% url 'home' %}">Home<br></a></li>
+                      {% if user.is_authenticated %}          
+                      <li><a href="{% url 'profile' request.user.id  %}" class="nav-item nav-link">Profile</a></li>
+                      <li><a href="{% url 'book_ticket' %}" class="nav-item nav-link">Book Ticket</a></li>
+                      {% endif %}
+            
+                      <li><a href="{% url 'passenger_register' %}">Register<br></a></li>
+            
+                      {% if user.is_authenticated %}
+                                      {% if user.is_superuser %}
+                                      <a href="{% url 'staff_register' %}" class="nav-item nav-link">Add Staff</a></li>
+                                      <a href="{% url 'home' %}" class="nav-item nav-link">Staff List</a></li>
+                                      {% else %}  
+                                      {% if user.is_staff %}
+                                      <a href="{% url 'doctor_registration' %}" class="nav-item nav-link">Registration Form</a></li>
+                                      <!-- <a href="{% url 'appointment_list' %}" class="nav-item nav-link">View Appointment</a></li> -->
+                                      <a href="{% url 'doctor_appointment_list' %}"class="nav-item nav-link" >View My Appointments</a>
+                                      {% else %}
+                                      
+                                      <a href="{% url 'home' %}" class="nav-item nav-link">
+                                          <i class="fas fa-bell"></i>
+                                          {% if unread_notifications_count > 0 %}
+                                              <span class="badge badge-danger">{{ unread_notifications_count }}</span>
+                                          {% endif %}
+                                      </a>
+                                      <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                                        <ul>
+                                          <li><a href="{% url 'about' %}" class="active">About</a></li>
+                                          <li><a href="{% url 'service' %}">Services</a></li>
+                                          <li><a href="{% url 'contact' %}">Contact</a></li>
+                                        </ul>
+                                      </li>
+                                      {% endif %}
+                                      {% endif %}
+                                      <a href="{% url 'logout' %}" class="nav-item nav-link">Logout</a></li>
+                                      {% else %}
+                                      <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                                        <ul>
+                                          <li><a href="{% url 'about' %}" class="active">About</a></li>
+                                          <li><a href="{% url 'service' %}">Services</a></li>
+                                          <li><a href="{% url 'contact' %}">Contact</a></li>
+                                        </ul>
+                                      </li>
+                                      <a href="{% url 'loginform' %}" class="active nav-item nav-link">Login</a></li>
+                                      {% endif %}
+                    </ul>
+                    <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+                  </nav>
+                  <!-- <a class="btn-getstarted" href="{% url 'loginform' %}">Login</a> -->
+                  
+            
+                </div>
+              </header>
+              
+        <form method="post" action="">
+            {% csrf_token %}
+            <div class="form first">
+                <div class="details personal">
+                    <span class="title">Personal Details</span>
+
+                    <div class="fields">
+                        <div class="input-field">
+                            <label for="fullname">Full Name</label>
+                            <input type="text" id="fullname" name="fullname" placeholder="Enter your name" required>
+                        </div>
+
+                        <div class="input-field">
+                            <label for="birthdate">Date of Birth</label>
+                            <input type="date" id="birthdate" name="birth_date" placeholder="Enter birth date" required>
+                        </div>
+
+                        <div class="input-field">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                        </div>
+
+                        <div class="input-field">
+                            <label for="phone_number">Mobile Number</label>
+                            <input type="tel" id="phone_number" name="phone_number" placeholder="Enter mobile number" required>
+                        </div>
+
+                        <div class="input-field">
+                            <label for="gender">Gender</label>
+                            <select id="gender" name="gender" required>
+                                <option disabled selected>Select gender</option>
+                                <option>Male</option>
+                                <option>Female</option>
+                                <option>Others</option>
+                            </select>
+                        </div>
+
+                        <div class="input-field">
+                            <label for="occupation">Occupation</label>
+                            <input type="text" id="occupation" name="occupation" placeholder="Enter your occupation" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="details ID">
+                    <span class="title">Additional Details</span>
+
+                    <div class="fields">
+                        <div class="input-field">
+                            <label for="nationality">Nationality</label>
+                            <input type="text" id="nationality" name="nationality" placeholder="Enter Nationality" required>
+                        </div>
+
+                        <div class="input-field">
+                            <label for="address">City</label>
+                            <input type="text" name="city" placeholder="Enter Address" required>
+                        </div>
+
+                        <div class="input-field"></div>
+                        
+                        <button class="submit" type="submit">
+                            <span class="btnText">Submit</span>
+                            <i class="uil uil-navigator"></i>
+                        </button>
+                    </div>
+                </div> 
+            </div>
+        </form>
+    </div>
+</body>
+</html>
